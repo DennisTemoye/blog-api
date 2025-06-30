@@ -5,12 +5,23 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "node test-server.js"
+    "test": "node test-server.js",
+    "build": "echo 'No build step required'",
+    "postinstall": "echo 'Post-install complete'"
   },
-  "keywords": [],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "railway",
+    "mysql"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Express.js API with MySQL database",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "config": "^4.0.0",

@@ -56,6 +56,15 @@ app.use(
   })
 );
 
+// Health check endpoint for Railway
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
+
 // console.log("Application Name: " + config.get("name"));
 // console.log("Mail Server: " + config.get("mail.host"));
 // console.log("Mail Password: " + config.get("mail.password"));
@@ -64,14 +73,25 @@ app.use(logger);
 
 const port = process.env.PORT || 3000;
 
-// Create all tables on server startup
-(async () => {
-  await createAllTables();
-})();
+// Initialize database and start server
+async function startServer() {
+  try {
+    // Create all tables on server startup
+    await createAllTables();
+    console.log("Database tables initialized successfully");
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}...`);
-  console.log(
-    `API Documentation available at: http://localhost:${port}/api-docs`
-  );
-});
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`Server is running on port ${port}...`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(
+        `API Documentation available at: http://localhost:${port}/api-docs`
+      );
+      console.log(`Health check available at: http://localhost:${port}/health`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
